@@ -33,8 +33,7 @@
     "web-vitals": "^4.2.3"
   },
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
-    "start": "react-scripts start",
+    "start": "node server.js",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build",
     "build": "react-scripts build",
     "test": "react-scripts test",
