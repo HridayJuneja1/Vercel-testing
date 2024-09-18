@@ -21,6 +21,7 @@ const BrowseBooks = () => {
           id: book._id,
           title: book.title || '',
           author: book.author || '',
+          isbn: book.isbn || '', // Assuming your book data contains an ISBN field
           image: book.image || ''
         }));
         setBooks(formattedBooks);
@@ -46,15 +47,16 @@ const BrowseBooks = () => {
     setFilteredBooks(sortedArray); // Update filteredBooks with the sorted array
   };
 
-  // Filtering books
+  // Filtering books by name, author, or ISBN (ignoring dashes in ISBN)
   const filterBooks = (searchTerm) => {
     if (!searchTerm.trim()) {
       setFilteredBooks(books); // Reset to all books if no search term
     } else {
-      const search = searchTerm.trim().toLowerCase();
+      const search = searchTerm.trim().toLowerCase().replace(/-/g, ''); // Remove dashes from the search term
       const filteredArray = books.filter(book =>
-        (book.title && book.title.toLowerCase().includes(search)) ||
-        (book.author && book.author.toLowerCase().includes(search))
+        (book.title && book.title.toLowerCase().includes(search)) || // Filter by title
+        (book.author && book.author.toLowerCase().includes(search)) || // Filter by author
+        (book.isbn && book.isbn.replace(/-/g, '').toLowerCase().includes(search)) // Filter by ISBN, ignoring dashes
       );
       setFilteredBooks(filteredArray); // Update with filtered books
     }

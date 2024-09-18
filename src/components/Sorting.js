@@ -1,19 +1,26 @@
-import React from 'react';
-
+// Sorting component that allows the user to sort books based on the selected order.
 const Sorting = ({ sortBooks }) => {
+
+  // Handles the change event when a sorting option is selected.
   const handleSortChange = (e) => {
-    const selectedOrder = e.target.value;
-    sortBooks(selectedOrder);
+    const selectedOrder = e.target.value; // Get the selected sorting order (asc or desc).
+    sortBooks(selectedOrder); // Calls the sortBooks function with the selected sorting order.
   };
 
   return (
     <div style={{ marginBottom: '20px', textAlign: 'right' }}>
-      <label htmlFor="sort-select" style={{ marginRight: '10px', fontSize: '1.6rem', color: '#fff' }}>
+      {/* Label for the sorting dropdown */}
+      <label 
+        htmlFor="sort-select" 
+        style={{ marginRight: '10px', fontSize: '1.6rem', color: '#fff' }}
+      >
         Sort by:
       </label>
+
+      {/* Dropdown to select sorting order (A to Z or Z to A) */}
       <select
         id="sort-select"
-        onChange={handleSortChange}
+        onChange={handleSortChange} // Trigger sorting when the selected option changes.
         style={{
           padding: '10px',
           fontSize: '1.3rem',
@@ -23,9 +30,9 @@ const Sorting = ({ sortBooks }) => {
           color: '#333',
         }}
       >
-        <option value="">Select an option</option>
-        <option value="asc">A to Z</option>
-        <option value="desc">Z to A</option>
+        <option value="">Select an option</option> {/* Default placeholder option */}
+        <option value="asc">A to Z</option> {/* Sort books in ascending order */}
+        <option value="desc">Z to A</option> {/* Sort books in descending order */}
       </select>
     </div>
   );

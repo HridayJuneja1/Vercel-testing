@@ -4,31 +4,27 @@ import '@testing-library/jest-dom';
 import axios from 'axios';
 import SignUp from '../SignUp';
 
-// Mock axios for API calls
 jest.mock('axios', () => ({
   post: jest.fn(() => Promise.resolve({ data: { success: true } })),
 }));
 
-// Mock react-i18next for translations
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key) => key,
   }),
 }));
 
-// Mock useNavigate for navigation
 const mockedNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedNavigate,
 }));
 
-// Mock window.alert to avoid JSDOM errors for unimplemented features
 global.alert = jest.fn();
 
 describe('SignUp Component', () => {
   beforeEach(() => {
-    jest.clearAllMocks();  // Clear mocks before each test
+    jest.clearAllMocks();
   });
 
   it('renders correctly', () => {
