@@ -1,0 +1,27 @@
+.book-section {
+  padding: 20px;
+  text-align: center;
+}
+
+.book-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.book-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  width: 400px;
+}
+
+.book-card img {
+  max-width: 100%;
+  height: auto;
+}
+
+.book-details {
+  text-align: center;
+}

@@ -1,0 +1,15 @@
+.verification-success-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .verification-success-title {
+    color: #4a4a4a;
+    font-size: 24px;
+  }
+  
+  .verification-success-text {
+    color: #606060;
+    font-size: 18px;
+  }
+  

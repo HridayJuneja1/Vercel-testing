@@ -1,0 +1,15 @@
+.sign-up-confirmation-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .sign-up-confirmation-title {
+    color: #333;
+    font-size: 24px;
+  }
+  
+  .sign-up-confirmation-text {
+    color: #666;
+    font-size: 18px;
+  }
+  

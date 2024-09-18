@@ -1,0 +1,49 @@
+.cart {
+  margin: 20px;
+  padding: 20px;
+}
+
+.cart h2 {
+  margin-bottom: 20px;
+}
+
+.cart-book-image {
+  width: 50px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.remove-from-cart-button {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.cart-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.continue-shopping-button,
+.proceed-to-checkout-button {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: blue;
+  color: white;
+}
