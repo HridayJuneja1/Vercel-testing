@@ -16,7 +16,7 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connection established'))
   .catch((error) => console.error('MongoDB connection failed:', error.message));
 
-  app.use(cors({ origin: 'https://samskrita-bharati.vercel.app' }));
+  app.use(cors({ origin: 'https://backup-sb1.vercel.app' }));
 
 app.use(express.json());
 app.use('/api', checkoutRouter);
