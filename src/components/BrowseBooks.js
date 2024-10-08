@@ -3,7 +3,6 @@ import BookCard from './BookCard';
 import Sorting from './Sorting';
 import Search from './Search';
 
-// The main component that handles displaying books, sorting, and searching.
 const BrowseBooks = () => {
   // `books` holds all the fetched books, `filteredBooks` holds the displayed (searched/sorted) books.
   const [books, setBooks] = useState([]);

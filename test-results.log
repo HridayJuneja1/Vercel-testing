@@ -1,27 +1,28 @@
+ PASS  src/components/__tests__/BookPickup.test.js
+ PASS  src/components/__tests__/SignUp.test.js
  PASS  src/components/__tests__/BookDetails.test.js
- PASS  src/components/__tests__/Contact.test.js
- PASS  src/components/__tests__/Login.test.js
+ PASS  src/components/__tests__/Checkout.test.js
  PASS  src/components/__tests__/Cart.test.js
  PASS  src/components/__tests__/BrowseBooks.test.js
- PASS  src/components/__tests__/ForgotPassword.test.js
- PASS  src/components/__tests__/FAQ.test.js
- PASS  src/components/__tests__/SignUp.test.js
- PASS  src/components/__tests__/Checkout.test.js
- PASS  src/components/__tests__/Search.test.js
  PASS  src/components/__tests__/ResetPassword.test.js
+ PASS  src/components/__tests__/Search.test.js
  PASS  src/components/__tests__/Footer.test.js
+ PASS  src/components/__tests__/FAQ.test.js
+ PASS  src/components/__tests__/ForgotPassword.test.js
  PASS  src/components/__tests__/NavBar.test.js
+ PASS  src/components/__tests__/Login.test.js
+ PASS  src/components/__tests__/Contact.test.js
+ PASS  src/components/__tests__/OrderConfirmed.test.js
  PASS  src/components/__tests__/BookCard.test.js
  PASS  src/components/__tests__/Home.test.js
  PASS  src/components/__tests__/SignUpConfirmation.test.js
- PASS  src/components/__tests__/PasswordChange.test.js
- PASS  src/components/__tests__/Sorting.test.js
  PASS  src/components/__tests__/MyBooks.test.js
+ PASS  src/components/__tests__/PasswordChange.test.js
  PASS  src/components/__tests__/VerificationSuccess.Test.js
- PASS  src/components/__tests__/OrderConfirmed.test.js
+ PASS  src/components/__tests__/Sorting.test.js
 
-Test Suites: 21 passed, 21 total
-Tests:       57 passed, 57 total
+Test Suites: 22 passed, 22 total
+Tests:       60 passed, 60 total
 Snapshots:   0 total
-Time:        1.053 s
+Time:        1.082 s
 Ran all test suites.

@@ -4,9 +4,34 @@ import '@testing-library/jest-dom';
 import axios from 'axios';
 import Cart from '../Cart';
 
+// Mock axios requests
 jest.mock('axios', () => ({
   get: jest.fn(),
   post: jest.fn(),
+}));
+
+// Mock the useTranslation hook
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key) => {
+      const translations = {
+        'loading': 'Loading...',
+        'your_cart': 'Your Cart',
+        'cart_empty': 'Your cart is empty.',
+        'delete': 'Delete',
+        'proceed_to_checkout': 'Proceed to Checkout',
+        'continue_shopping': 'Continue Shopping',
+        'book_image': 'Book',
+        'book_name': 'Book Name',
+        'publication': 'Publication',
+        'standard': 'Standard',
+        'publication_year': 'Publication Year',
+        'action': 'Action',
+        'error_remove_cart_item': 'Error removing cart item:',
+      };
+      return translations[key];
+    },
+  }),
 }));
 
 describe('Cart Component', () => {
@@ -27,10 +52,10 @@ describe('Cart Component', () => {
     });
 
     // Expect "Loading..." to be shown before the data is resolved
-    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+    expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
 
     // Wait for the loading to finish and the empty cart message to appear
-    await waitFor(() => expect(screen.getByText(/your cart is empty./i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/Your cart is empty./i)).toBeInTheDocument());
   });
 
   test('shows empty cart message when no items', async () => {
@@ -40,7 +65,7 @@ describe('Cart Component', () => {
       render(<Cart />);
     });
 
-    await waitFor(() => expect(screen.getByText(/your cart is empty./i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/Your cart is empty./i)).toBeInTheDocument());
   });
 
   test('renders cart items correctly', async () => {
@@ -83,9 +108,9 @@ describe('Cart Component', () => {
     });
 
     await waitFor(() => expect(screen.getByText('Book 1')).toBeInTheDocument());
-    fireEvent.click(screen.getByText(/delete/i));
+    fireEvent.click(screen.getByText(/Delete/i));
 
-    await waitFor(() => expect(screen.getByText(/your cart is empty./i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/Your cart is empty./i)).toBeInTheDocument());
   });
 
   test('navigates to checkout page when checkout button is clicked', async () => {
@@ -110,7 +135,7 @@ describe('Cart Component', () => {
     delete window.location;
     window.location = { href: '' };
 
-    fireEvent.click(screen.getByText(/proceed to checkout/i));
+    fireEvent.click(screen.getByText(/Proceed to Checkout/i));
     expect(window.location.href).toBe('/checkout');
   });
 });

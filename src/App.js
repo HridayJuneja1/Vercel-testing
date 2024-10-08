@@ -9,99 +9,75 @@ import VerificationSuccess from './components/VerificationSuccess';
 import Footer from './components/Footer';
 import { Header, FeatureSection } from './components/MyBooks';
 import { Banner, HomeFeature, FAQSection } from './components/Home';
-import BrowseBooks from './components/BrowseBooks.js';
-import Cart from './components/Cart.js';
+import BrowseBooks from './components/BrowseBooks';
+import Cart from './components/Cart';
 import Contact from './components/Contact';
 import BookDetails from './components/BookDetails';
 import Checkout from './components/Checkout';
 import FAQ from './components/FAQ';
-import OrderConfirmed from './components/OrderConfirmed.js';
-import ForgotPassword from './components/ForgotPassword.js';
-import ResetPassword from './components/ResetPassword.js';
+import OrderConfirmed from './components/OrderConfirmed';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
+import BookPickup from './components/BookPickup';
 import './config/i18n';
 
 function App() {
-  
   return (
-      <Router>
-        <AppInner />
-      </Router>
+    <Router>
+      <AppInner />
+    </Router>
   );
 }
 
 const AppInner = () => {
-
   return (
     <>
       <NavBar />
       <Routes>
-        <Route path="/" element={
-          <>
-            <Banner />
-            <HomeFeature />
-            <FAQSection />
-          </>
-        } />
-        <Route path="/MyBooks" element={
-          <>
-            <Header />
-            <FeatureSection />
-          </>
-        } />
-
-        <Route path="/checkout" element={
-          <>
-            <Checkout />
-            <FAQ />
-          </>
-        } />
-        <Route path="/change-password" element={
-          <>
-            <PasswordChange />
-          </>
-        } />
-        <Route path="/login" element={
-          <>
-            <Login />
-          </>
-        } />
-        <Route path="/signup" element={
-          <>
-            <SignUp />
-          </>
-        } />
-        <Route path="/browse-books" element={
-          <>
-            <BrowseBooks />
-          </>
-        } />
-        <Route path="/cart" element={
-          <>
-            <Cart />
-          </>
-        } />
-        <Route path="/forgot-password" element={
-          <>
-            <ForgotPassword />
-          </>
-        } />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-
-
+        <Route path="/" element={<HomePage />} />
+        <Route path="/mybooks" element={<MyBooksPage />} />
         <Route path="/change-password" element={<PasswordChange />} />
-        <Route path="/signup-confirmation" element={<SignUpConfirmation />} />
-        <Route path="/verify-success" element={<VerificationSuccess />} />
-        <Route path="/book/:bookId" element={<BookDetails />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/browse-books" element={<BrowseBooks />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/signup-confirmation" element={<SignUpConfirmation />} />
+        <Route path="/book/:bookId" element={<BookDetails />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/order-confirmed" element={<OrderConfirmed />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/book-pickup" element={<BookPickup />} />
+        <Route path="/api/users/verify/:token" element={<VerificationSuccess />} />
+
       </Routes>
-      <>
-        <Footer />
-      </>
+      <Footer />
     </>
   );
 };
 
-export default App;
+// Components for the Home and MyBooks pages for better organization
+const HomePage = () => (
+  <>
+    <Banner />
+    <HomeFeature />
+    <FAQSection />
+  </>
+);
 
+const MyBooksPage = () => (
+  <>
+    <Header />
+    <FeatureSection />
+  </>
+);
+
+const CheckoutPage = () => (
+  <>
+    <Checkout />
+    <FAQ />
+  </>
+);
+
+export default App;

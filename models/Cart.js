@@ -9,7 +9,7 @@ const cartItemSchema = new Schema({
   standard: { type: Number, required: true },
   description: { type: String, required: true },
   publication_year: { type: String, required: false },
-  dimensions: { type: String, required: false },
+  dimensions: { type: String, required: false }
 });
 
 const cartSchema = new Schema({
@@ -17,8 +17,8 @@ const cartSchema = new Schema({
   items: [cartItemSchema],
 }, {
   timestamps: true,
+  collection: 'carts'
 });
 
 const Cart = mongoose.model('Cart', cartSchema);
-
 module.exports = Cart;
