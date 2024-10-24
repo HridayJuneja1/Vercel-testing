@@ -81,27 +81,7 @@ const styles = {
   }
 };
 
-const Banner = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-
-  return (
-    <div style={styles.bannerStyle}>
-      <h1>{t('banner_title')}</h1>
-      <p>{t('banner_description')}</p>
-      <div>
-        <button style={styles.buttonStyle} onClick={() => navigate('/browse-books')}>
-          {t('browse_books')}
-        </button>
-        <button style={styles.buttonStyle} onClick={() => navigate('/signup')}>
-          {t('sign_up')}
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const HomeFeature = () => {
+const Home = () => {
   const { t } = useTranslation();
 
   return (
@@ -120,30 +100,4 @@ const HomeFeature = () => {
   );
 };
 
-const FAQSection = () => {
-  const { t } = useTranslation();
-
-  return (
-    <div style={styles.faqStyle}>
-      <h2 style={styles.faqHeaderStyle}>{t('faq_title')}</h2>
-      <div style={styles.faqColumnStyle}>
-        <div style={styles.questionStyle}>{t('faq_how_to_borrow_books')}</div>
-        <p>{t('faq_borrow_books_answer')}</p>
-        <div style={styles.questionStyle}>{t('faq_miss_return_date')}</div>
-        <p>{t('faq_miss_return_date_answer')}</p>
-        <div style={styles.questionStyle}>{t('faq_reserve_book')}</div>
-        <p>{t('faq_reserve_book_answer')}</p>
-      </div>
-      <div style={styles.faqColumnStyle}>
-        <div style={styles.questionStyle}>{t('faq_borrowing_period')}</div>
-        <p>{t('faq_borrowing_period_answer')}</p>
-        <div style={styles.questionStyle}>{t('faq_download_offline')}</div>
-        <p>{t('faq_download_offline_answer')}</p>
-        <div style={styles.questionStyle}>{t('faq_search_books')}</div>
-        <p>{t('faq_search_books_answer')}</p>
-      </div>
-    </div>
-  );
-};
-
-export { Banner, HomeFeature, FAQSection };
+export default Home;

@@ -9,6 +9,7 @@ const checkoutRouter = require('./routes/checkout');
 const usersRouter = require('./routes/users');
 const booksRouter = require('./routes/books');
 const pickupRouter = require('./routes/pickup');
+const dashboardRouter = require('./routes/dashboard');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -19,6 +20,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.use(cors());
 app.use(express.json());
 app.use('/api', checkoutRouter);
+app.use('/api/dashboard', dashboardRouter);
 app.use('/api', usersRouter);
 app.use('/api', cartRouter);
 app.use('/api/users', usersRouter);

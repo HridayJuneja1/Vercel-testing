@@ -8,27 +8,36 @@ function Login() {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const login = (user) => {
-    localStorage.setItem('user', JSON.stringify(user));
-    window.location.href = '/';
-  };
-  
 
+  // Handle login form submission
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      // Make the login request
       const response = await axios.post('/api/users/login', { email, password });
 
+      // Check if authentication was successful
       if (response.data.authenticated) {
-        login(response.data.user);
+        // Store the full user data (including _id) in localStorage
+        localStorage.setItem('user', JSON.stringify({
+          _id: response.data._id, // Store the user ID properly
+          name: response.data.user.name,
+          email: response.data.user.email,
+        }));
+
+        // Redirect to dashboard with user ID
+        window.location.href = `/`;
         alert(t('login_successful'));
+      } else {
+        alert(t('login_failed')); // In case authentication fails
       }
     } catch (error) {
       if (error.response) {
+        // Handle specific error message from the backend
         alert(`${t('login_failed_error')}${error.response.data.error}`);
       } else {
-        console.error('Login error:', error);
-        alert(t('login_failed'));
+        console.error('Login error:', error); // Log any other error
+        alert(t('login_failed')); // General login failure message
       }
     }
   };

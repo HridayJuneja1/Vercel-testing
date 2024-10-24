@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const NavBar = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
   const { t, i18n } = useTranslation();
+  const user = JSON.parse(localStorage.getItem('user')); // Retrieve user data from localStorage
+  const [dropdownOpen, setDropdownOpen] = useState(false); // Control dropdown visibility
 
   const changeLanguage = (language) => {
     i18n.changeLanguage(language);
-    localStorage.setItem('language', language);
+    localStorage.setItem('language', language); // Store language preference
   };
 
   const navBarStyle = {
@@ -27,9 +28,29 @@ const NavBar = () => {
     cursor: 'pointer',
   };
 
+  const dropdownStyle = {
+    position: 'absolute',
+    top: '100%',
+    right: '0',
+    backgroundColor: 'white',
+    color: 'black',
+    boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.1)',
+    zIndex: '1',
+    listStyle: 'none',
+    padding: '10px',
+    display: dropdownOpen ? 'block' : 'none', // Show or hide dropdown
+  };
+
+  const dropdownItemStyle = {
+    padding: '10px',
+    textDecoration: 'none',
+    color: 'black',
+    cursor: 'pointer',
+  };
+
   const handleLogout = () => {
-    localStorage.removeItem('user'); 
-    window.location.href = '/login';
+    localStorage.removeItem('user'); // Clear user data from localStorage
+    window.location.href = '/login'; // Redirect to login page
   };
 
   return (
@@ -41,14 +62,38 @@ const NavBar = () => {
         <a href="/" style={navItemStyle}>{t('home')}</a>
         <a href="/MyBooks" style={navItemStyle}>{t('catalog')}</a>
         <a href="/cart" style={navItemStyle}>{t('your_cart')}</a>
-        <a href="/change-password" style={navItemStyle}>{t('change_password_title')}</a>
+
         {user ? (
-          <>
-            <span style={{ ...navItemStyle }}>{user.name}</span>
-            <button onClick={handleLogout} style={{ ...navItemStyle, background: 'none', border: 'none' }}>
-              {t('logout')}
-            </button>
-          </>
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            {/* User name and dropdown arrow */}
+            <span
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              style={{ ...navItemStyle, cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}
+            >
+              {user.name} <span style={{ marginLeft: '5px', transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.3s' }}>▼</span>
+            </span>
+
+            {/* Dropdown menu */}
+            <ul style={dropdownStyle}>
+              <li>
+                <a href={`/dashboard/${user._id}`} style={dropdownItemStyle}>
+                  {t('personalized_dashboard')}
+                </a>
+              </li>
+              <br />
+              <li>
+                <a href="/change-password" style={dropdownItemStyle}>
+                  {t('change_password_title')}
+                </a>
+              </li>
+              <br />
+              <li>
+                <a onClick={handleLogout} style={dropdownItemStyle}>
+                  {t('logout')}
+                </a>
+              </li>
+            </ul>
+          </div>
         ) : (
           <>
             <a href="/login" style={navItemStyle}>{t('log_in')}</a>

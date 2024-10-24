@@ -7,8 +7,11 @@ import PasswordChange from './components/PasswordChange';
 import SignUpConfirmation from './components/SignUpConfirmation';
 import VerificationSuccess from './components/VerificationSuccess';
 import Footer from './components/Footer';
-import { Header, FeatureSection } from './components/MyBooks';
-import { Banner, HomeFeature, FAQSection } from './components/Home';
+import Header from './components/Header';
+import MyBooks from './components/MyBooks';
+import Home from './components/Home';
+import Banner from './components/Banner';
+import FAQSection from './components/FAQSection';
 import BrowseBooks from './components/BrowseBooks';
 import Cart from './components/Cart';
 import Contact from './components/Contact';
@@ -19,6 +22,8 @@ import OrderConfirmed from './components/OrderConfirmed';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import BookPickup from './components/BookPickup';
+import Dashboard from './components/Dashboard';
+import PickupConfirmed from './components/PickupConfirmed';
 import './config/i18n';
 
 function App() {
@@ -49,19 +54,19 @@ const AppInner = () => {
         <Route path="/order-confirmed" element={<OrderConfirmed />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/book-pickup" element={<BookPickup />} />
+        <Route path="/dashboard/:userId/*" element={<Dashboard />} />
         <Route path="/api/users/verify/:token" element={<VerificationSuccess />} />
-
+        <Route path="/pickup-confirmed" element={<PickupConfirmed />} />
       </Routes>
       <Footer />
     </>
   );
 };
 
-// Components for the Home and MyBooks pages for better organization
 const HomePage = () => (
   <>
     <Banner />
-    <HomeFeature />
+    <Home />
     <FAQSection />
   </>
 );
@@ -69,7 +74,7 @@ const HomePage = () => (
 const MyBooksPage = () => (
   <>
     <Header />
-    <FeatureSection />
+    <MyBooks />
   </>
 );
 

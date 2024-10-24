@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const User = require('../models/user.model');
+const User = require('../models/User');
 const router = express.Router();
 
 const transporter = nodemailer.createTransport({
@@ -77,24 +77,8 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'User not found.' });
     }
 
-    if (user.isLocked) {
-      return res.status(403).json({ error: 'Your account is locked. Please reset your password.' });
-    }
-
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      user.loginAttempts += 1;
-      if (user.loginAttempts >= 3) {
-        user.isLocked = true;
-        const resetPasswordUrl = `YOUR_FRONT_END_PATH_FOR_RESETTING_PASSWORD`;
-        await transporter.sendMail({
-          from: process.env.GMAIL_USER,
-          to: user.email,
-          subject: 'Account Locked',
-          html: `Your account has been locked due to multiple failed login attempts. Please reset your password.`
-        });
-      }
-      await user.save();
       return res.status(401).json({ error: 'Invalid password.' });
     }
 
@@ -103,28 +87,16 @@ router.post('/login', async (req, res) => {
     }
 
     user.loginAttempts = 0;
-    user.LoggedIn = true;
     await user.save();
 
-    try {
-      await transporter.sendMail({
-        from: process.env.GMAIL_USER,
-        to: user.email,
-        subject: 'New login detected',
-        html: 'A new login to your account was detected. If this was not you, please change your password immediately.'
-      });
-    } catch (emailError) {
-      console.error('Failed to send email:', emailError);
-    }
-
     res.json({
+      _id: user._id, // Include the user's ID in the response
       authenticated: true,
       user: {
         name: user.name,
         email: user.email,
       }
     });
-
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Server error' });

@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const Pickup = require('../models/Pickup');
+const Cart = require('../models/Cart');
 const nodemailer = require('nodemailer');
 
 // In-memory object to store booked slots (for production, you should use a database or the Pickup model)
@@ -16,19 +17,21 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Route to handle scheduling a book pickup
 router.post('/schedule', async (req, res) => {
-  const { cartId, email, pickupDate, pickupTime, pickupLocation } = req.body; // Destructuring request body to extract required fields
+  const { cartId, email, pickupDate, pickupTime, pickupLocation } = req.body;
 
   try {
     // Validate that all required fields are provided
     if (!email || !pickupDate || !pickupTime || !pickupLocation) {
-      return res.status(400).send('All fields (email, pickupDate, pickupTime, pickupLocation) are required.'); // Send a 400 error if any field is missing
+      return res.status(400).send('All fields (email, pickupDate, pickupTime, pickupLocation) are required.');
     }
+
+    // Convert pickupDate from string to Date object
+    const formattedPickupDate = new Date(pickupDate); // Convert ISO string back to Date
 
     // Check if the selected time slot is already booked
     const existingBooking = await Pickup.findOne({
-      pickupDate,
+      pickupDate: formattedPickupDate, // Use the Date object
       pickupTime,
       pickupLocation,
     });
@@ -38,66 +41,79 @@ router.post('/schedule', async (req, res) => {
       return res.status(409).json({ message: 'This time slot is already booked. Please select another slot.' });
     }
 
+    // Find the user's cart by cartId and retrieve the items
+    const cart = await Cart.findById(cartId);
+    
+    if (!cart || cart.items.length === 0) {
+      return res.status(404).json({ message: 'Cart not found or cart is empty.' });
+    }
+
     // Check if the user already has a pickup scheduled
     const existingPickup = await Pickup.findOne({ userEmail: email });
 
     if (existingPickup) {
-      // If a pickup exists, update the existing record with new details
-      existingPickup.pickupDate = pickupDate;
+      // If a pickup exists, update the existing record with new details and the items
+      existingPickup.pickupDate = formattedPickupDate; // Use Date object
       existingPickup.pickupTime = pickupTime;
       existingPickup.pickupLocation = pickupLocation;
-      await existingPickup.save(); // Save the updated pickup
-      console.log('Updated existing booking:', existingPickup); // Log the updated booking for debugging
+      existingPickup.items = cart.items; // Use cart items directly from the cart
+      await existingPickup.save();
+      console.log('Updated existing booking:', existingPickup);
     } else {
-      // If no existing pickup, create a new one
+      // If no existing pickup, create a new one with the items from the cart
       const newPickup = new Pickup({
         cartId,
         userEmail: email,
-        pickupDate,
+        pickupDate: formattedPickupDate, // Use Date object
         pickupTime,
         pickupLocation,
+        items: cart.items, // Store the cart items without requiring user input for them
       });
-      await newPickup.save(); // Save the new pickup in the database
-      console.log('Created new booking:', newPickup); // Log the new booking for debugging
+      await newPickup.save();
+      console.log('Created new booking:', newPickup);
     }
 
     // Sending a confirmation email to the user
     const mailOptions = {
-      from: 'hridayjuneja04@gmail.com', // Sender email address
-      to: email, // Recipient's email address
-      subject: 'Book Pickup Confirmation', // Email subject
-      text: `Dear user,\n\nYour book pickup has been scheduled successfully. Here are the details:\n\nPickup Location: ${pickupLocation}\nPickup Date: ${pickupDate}\nPickup Time: ${pickupTime}\n\nThank you for using our service!\n\nBest regards,\nSamskrita Bharati Team`, // Email body content
+      from: 'hridayjuneja04@gmail.com',
+      to: email,
+      subject: 'Book Pickup Confirmation',
+      text: `Dear user,\n\nYour book pickup has been scheduled successfully. Here are the details:\n\nPickup Location: ${pickupLocation}\nPickup Date: ${pickupDate}\nPickup Time: ${pickupTime}\n\nThank you for using our service!\n\nBest regards,\nSamskrita Bharati Team`,
     };
 
-    // Send the email using the transporter
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error('Error sending email:', error.message); // Log any error that occurs while sending the email
+        console.error('Error sending email:', error.message);
       } else {
-        console.log('Email sent: ' + info.response); // Log the response when the email is successfully sent
+        console.log('Email sent: ' + info.response);
       }
     });
 
-    // Respond with a success message
     res.status(200).json({ message: 'Pickup scheduled successfully' });
   } catch (error) {
-    console.error('Error scheduling pickup:', error.message); // Log any error that occurs while scheduling the pickup
-    res.status(500).send('Error scheduling pickup: ' + error.message); // Respond with a 500 error and the error message
+    console.error('Error scheduling pickup:', error.message);
+    res.status(500).send('Error scheduling pickup: ' + error.message);
   }
 });
 
-// Route to fetch available slots for a selected date and location
+
+
 router.get('/available-slots', async (req, res) => {
-  const { pickupDate, pickupLocation } = req.query; // Destructuring query parameters
+  const { pickupDate, pickupLocation } = req.query;
 
   try {
-    // Format the incoming date to match the format stored in the database (YYYY-MM-DD)
-    const formattedPickupDate = new Date(pickupDate).toISOString().split('T')[0]; 
+    // Ensure that the pickupDate is a valid date string
+    const selectedDate = new Date(pickupDate);
+    const startOfDay = new Date(selectedDate.setUTCHours(0, 0, 0, 0)); // Start of the day
+    const endOfDay = new Date(selectedDate.setUTCHours(23, 59, 59, 999)); // End of the day
 
     // Query the database for pickups on the selected date and location
     const bookedPickups = await Pickup.find({
-      pickupDate: { $regex: `^${formattedPickupDate}` }, // Using regex to match the date part only
-      pickupLocation
+      pickupDate: {
+        $gte: startOfDay, // Pickups after the start of the day
+        $lt: endOfDay, // Pickups before the end of the day
+      },
+      pickupLocation, // Match the selected location
     });
 
     // Extract the already booked times from the results
@@ -122,10 +138,11 @@ router.get('/available-slots', async (req, res) => {
     // Respond with the available slots
     res.status(200).json({ availableSlots });
   } catch (error) {
-    console.error('Error fetching available slots:', error.message); // Log any error that occurs while fetching slots
-    res.status(500).json({ error: 'Failed to fetch available slots' }); // Respond with a 500 error and a message
+    console.error('Error fetching available slots:', error.message); // Log the error
+    res.status(500).json({ error: 'Failed to fetch available slots' });
   }
 });
+
 
 // Route to get the user's scheduled pickup details
 router.get('/scheduled', async (req, res) => {

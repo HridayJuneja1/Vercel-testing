@@ -64,27 +64,7 @@ const styles = {
   },
 };
 
-const Header = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-
-  return (
-    <header style={styles.headerStyle}>
-      <h1>{t('header_title')}</h1>
-      <p>{t('header_subtitle')}</p>
-      <div>
-        <button style={{ ...styles.buttonStyle, backgroundColor: 'black', color: 'white' }} onClick={() => navigate('/browse-books')}>
-          {t('browse_books_button')}
-        </button>
-        <button style={{ ...styles.buttonStyle, backgroundColor: 'white', color: 'black' }} onClick={() => navigate('/contact')}>
-          {t('contact_us_button')}
-        </button>
-      </div>
-    </header>
-  );
-};
-
-const FeatureSection = () => {
+const MyBooks = () => {
   const { t } = useTranslation();
 
   return (
@@ -107,4 +87,4 @@ const FeatureSection = () => {
   );
 };
 
-export { Header, FeatureSection };
+export default MyBooks;
